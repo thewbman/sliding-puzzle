@@ -19,16 +19,23 @@ export default function Board(board: Readonly<BoardSetup>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
+  const [solved, setSolved] = useState(false);
 
   useEffect(() => {
-    setTiles(
-      generateHomeTiles(
-        board
-      )
-    );
+    setTiles(generateHomeTiles(board));
     setPlayerClicks(0);
     setPlayerMoves(0);
   }, [board]);
+
+  useEffect(() => {
+    setSolved(
+      tiles.every(
+        (t) =>
+          t.currentPosition.x === t.homePosition.x &&
+          t.currentPosition.y === t.homePosition.y
+      )
+    );
+  }, [tiles]);
 
   const handleShuffleClick = () => {
     setTiles(shuffleTiles(tiles, board));
@@ -47,6 +54,7 @@ export default function Board(board: Readonly<BoardSetup>) {
         )
       );
     }
+    // add multi-moves in a straight line
   };
 
   const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;
@@ -58,6 +66,7 @@ export default function Board(board: Readonly<BoardSetup>) {
     >
       <Typography>
         Board ({playerMoves} moves, {playerClicks} clicks)
+        {solved ? " SOLVED!!!!" : ""}
       </Typography>
       <Button onClick={handleShuffleClick}>Shuffle</Button>
       <div className="board">

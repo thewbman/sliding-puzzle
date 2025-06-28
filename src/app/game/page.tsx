@@ -99,12 +99,14 @@ export default function GamePage() {
           onChange={(e) => setRandomHolePlacement(e.target.checked)}
         ></Checkbox>
       </div>
-      <Board
-        rowCount={rowCount}
-        columnCount={columnCount}
-        aspectRatio={aspectRatio}
-        randomHolePlacement={randomHolePlacement}
-      />
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+        <Board
+          rowCount={rowCount}
+          columnCount={columnCount}
+          aspectRatio={aspectRatio}
+          randomHolePlacement={randomHolePlacement}
+        />
+      </div>
     </div>
   );
 }
