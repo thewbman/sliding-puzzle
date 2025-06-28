@@ -12,7 +12,7 @@ export default function GamePage() {
   const [aspectRatio, setAspectRatio] = useState(0.8);
   const [randomHolePlacement, setRandomHolePlacement] = useState(false);
 
-  const nums = [1, 2, 3, 4, 5, 6];
+  const nums = [2, 3, 4, 5, 6];
 
   return (
     <div>
@@ -67,7 +67,7 @@ export default function GamePage() {
         <TextField
           select
           label="Aspect Ratio"
-          defaultValue={1}
+          defaultValue={2}
           slotProps={{
             select: {
               native: true,
@@ -80,7 +80,7 @@ export default function GamePage() {
             marginLeft: "10px",
           }}
           onChange={(e) =>
-            setAspectRatio(parseFloat(`1.${e.target.value}`) - 0.3)
+            setAspectRatio(parseFloat(`1.${e.target.value}`) - 0.2)
           }
         >
           {nums.map((n) => (
@@ -99,7 +99,13 @@ export default function GamePage() {
           onChange={(e) => setRandomHolePlacement(e.target.checked)}
         ></Checkbox>
       </div>
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
         <Board
           rowCount={rowCount}
           columnCount={columnCount}
