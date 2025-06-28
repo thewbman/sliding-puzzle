@@ -6,6 +6,7 @@ export interface Position {
 export interface BoardSize {
   rowCount: number;
   columnCount: number;
+  aspectRatio: number;
 }
 
 export interface ScreenSize {

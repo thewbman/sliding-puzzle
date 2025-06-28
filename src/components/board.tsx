@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 
 import Tile, { TileProps } from "@/components/tile";
 
@@ -9,16 +10,15 @@ import {
   getNewPositionIfValid,
   shuffleTiles,
 } from "@/lib/board.lib";
-import { getTileHeightPx, getTileWidthPx } from "@/lib/board.layout";
 import { BoardSize } from "@/types";
-import useScreenSize from "@/hooks/screen-size.hook";
+
+import "./board.variables.css";
+import "./board.css";
 
 export default function Board(board: Readonly<BoardSize>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
-
-  const screenSize = useScreenSize();
 
   useEffect(() => {
     setTiles(
@@ -31,6 +31,8 @@ export default function Board(board: Readonly<BoardSize>) {
 
   const handleShuffleClick = () => {
     setTiles(shuffleTiles(tiles, board));
+    setPlayerClicks(0);
+    setPlayerMoves(0);
   };
 
   const handleTileClick = (index: number) => {
@@ -46,22 +48,18 @@ export default function Board(board: Readonly<BoardSize>) {
     }
   };
 
+  const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;
+
   return (
-    <div style={{ backgroundColor: "yellow", color: "black" }}>
-      <div>
+    <div
+      className={wrapperClassName}
+      style={{ "--tile-aspect-ratio": board.aspectRatio }}
+    >
+      <Typography>
         Board ({playerMoves} moves, {playerClicks} clicks)
-      </div>
+      </Typography>
       <Button onClick={handleShuffleClick}>Shuffle</Button>
-      <div
-        style={{
-          width: `${getTileWidthPx(board, screenSize) * board.columnCount}px`,
-          height: `${getTileHeightPx() * board.rowCount}px`,
-          borderColor: "blue",
-          borderWidth: 1,
-          borderStyle: "solid",
-          position: "relative",
-        }}
-      >
+      <div className="board">
         {tiles?.map((t) => (
           <Tile
             key={t.index}

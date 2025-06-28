@@ -2,8 +2,8 @@
 import Typography from "@mui/material/Typography";
 
 import type { BoardSize, Position } from "@/types";
-import { getTileStyle } from "@/lib/board.layout";
-import useScreenSize from "@/hooks/screen-size.hook";
+
+import "./tile.css";
 
 export interface TileProps {
   index: number;
@@ -22,16 +22,17 @@ export default function Tile({
   label,
   currentPosition,
   homePosition,
-  board,
   onClick,
 }: Readonly<PropsWithFunction>) {
-  const screenSize = useScreenSize();
+
+  const isInHomePosition =
+    homePosition.x === currentPosition.x && homePosition.y == currentPosition.y;
+  const tileClassName = `tile row-${currentPosition.y} column-${
+    currentPosition.x
+  }${isInHomePosition ? " isInHomePosition" : ""}`;
 
   return (
-    <div
-      style={getTileStyle(currentPosition, homePosition, board, screenSize)}
-      onClick={() => onClick(index)}
-    >
+    <div className={tileClassName} onClick={() => onClick(index)}>
       <Typography align="center" variant="h2">
         {label}
       </Typography>

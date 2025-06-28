@@ -1,0 +1,84 @@
+/* Board (1-index) */
+.total-columns-1 {
+  --column-count: 1;
+}
+.total-columns-2 {
+  --column-count: 2;
+}
+.total-columns-3 {
+  --column-count: 3;
+}
+.total-columns-4 {
+  --column-count: 4;
+}
+.total-columns-5 {
+  --column-count: 5;
+}
+.total-columns-6 {
+  --column-count: 6;
+}
+.total-rows-1 {
+  --row-count: 1;
+}
+.total-rows-2 {
+  --row-count: 2;
+}
+.total-rows-3 {
+  --row-count: 3;
+}
+.total-rows-4 {
+  --row-count: 4;
+}
+.total-rows-5 {
+  --row-count: 5;
+}
+.total-rows-6 {
+  --row-count: 6;
+}
+
+/* Tile (0-index) */
+.column-0 {
+  --column-index: 0;
+}
+.column-1 {
+  --column-index: 1;
+}
+.column-2 {
+  --column-index: 2;
+}
+.column-3 {
+  --column-index: 3;
+}
+.column-4 {
+  --column-index: 4;
+}
+.column-5 {
+  --column-index: 5;
+}
+.row-0 {
+  --row-index: 0;
+}
+.row-1 {
+  --row-index: 1;
+}
+.row-2 {
+  --row-index: 2;
+}
+.row-3 {
+  --row-index: 3;
+}
+.row-4 {
+  --row-index: 4;
+}
+.row-5 {
+  --row-index: 5;
+}
+
+/* Dynamic sizing */
+.board-container {
+  --tile-width-large: 160px;
+  --tile-width-dynamic: calc(100vw / var(--column-count));
+  --tile-width: min(var(--tile-width-large), var(--tile-width-dynamic));
+
+  --tile-height: calc(var(--tile-width) * var(--tile-aspect-ratio));
+}
