@@ -1,3 +1,4 @@
+"use client";
 import type { Position, BoardSize } from "@/types";
 import { TileProps } from "@/components/tile";
 

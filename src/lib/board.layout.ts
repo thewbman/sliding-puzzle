@@ -1,3 +1,4 @@
+"use client";
 import type { Position, BoardSize } from "@/types";
 
 interface WindowDimensions {
@@ -17,7 +18,7 @@ function getWindowDimensions(): WindowDimensions {
 export const getTileWidthPx = ({ columnCount }: BoardSize) => {
   const w = getWindowDimensions();
 
-  if(w.width) {
+  if (w.width) {
     return Math.min(w.width / columnCount, 160);
   }
 
