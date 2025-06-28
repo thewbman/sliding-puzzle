@@ -1,11 +1,13 @@
-import type { Position, BoardSize } from "@/types";
+import type { Position, BoardSetup } from "@/types";
 import { TileProps } from "@/components/tile";
 
 export const generateHomeTiles = (
-  board: BoardSize,
-  indexToRemove?: number
+  board: BoardSetup
 ): TileProps[] => {
   const maxTiles = board.rowCount * board.columnCount - 1;
+  const indexToRemove = board.randomHolePlacement
+    ? Math.floor(Math.random() * board.columnCount * board.rowCount)
+    : undefined;
 
   let numberLabel = 0;
   const tiles: TileProps[] = [];
@@ -38,7 +40,7 @@ export const generateHomeTiles = (
 
 export const shuffleTiles = (
   input: TileProps[],
-  board: BoardSize
+  board: BoardSetup
 ): TileProps[] => {
   const MOVE_ATTEMPTS = 1000; // most will not be valid
   let successfulMoves = 0;
@@ -73,7 +75,7 @@ export const shuffleTiles = (
 export const getNewPositionIfValid = (
   index: number,
   tiles: TileProps[],
-  board: BoardSize
+  board: BoardSetup
 ): Position | null => {
   if (!tiles?.length) {
     return null;

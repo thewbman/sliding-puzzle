@@ -2,13 +2,15 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
 
 import Board from "@/components/board";
 
 export default function GamePage() {
   const [rowCount, setRowCount] = useState(3);
   const [columnCount, setColumnCount] = useState(3);
-  const [aspectRatio, setAspectRatio] = useState(1.1);
+  const [aspectRatio, setAspectRatio] = useState(0.8);
+  const [randomHolePlacement, setRandomHolePlacement] = useState(false);
 
   const nums = [1, 2, 3, 4, 5, 6];
 
@@ -83,15 +85,25 @@ export default function GamePage() {
         >
           {nums.map((n) => (
             <option key={n} value={n}>
-              {n - 3}
+              {n}
             </option>
           ))}
         </TextField>
+        <Checkbox
+          style={{
+            color: "white",
+            backgroundColor: "silver",
+            marginTop: "1em",
+            marginLeft: "10px",
+          }}
+          onChange={(e) => setRandomHolePlacement(e.target.checked)}
+        ></Checkbox>
       </div>
       <Board
         rowCount={rowCount}
         columnCount={columnCount}
         aspectRatio={aspectRatio}
+        randomHolePlacement={randomHolePlacement}
       />
     </div>
   );

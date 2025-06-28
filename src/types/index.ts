@@ -3,10 +3,11 @@ export interface Position {
   y: number;
 }
 
-export interface BoardSize {
+export interface BoardSetup {
   rowCount: number;
   columnCount: number;
   aspectRatio: number;
+  randomHolePlacement: boolean;
 }
 
 export interface ScreenSize {

@@ -10,12 +10,12 @@ import {
   getNewPositionIfValid,
   shuffleTiles,
 } from "@/lib/board.lib";
-import { BoardSize } from "@/types";
+import { BoardSetup } from "@/types";
 
 import "./board.variables.css";
 import "./board.css";
 
-export default function Board(board: Readonly<BoardSize>) {
+export default function Board(board: Readonly<BoardSetup>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
@@ -24,9 +24,10 @@ export default function Board(board: Readonly<BoardSize>) {
     setTiles(
       generateHomeTiles(
         board
-        // Math.round(Math.random() * TOTAL_POSITIONS)
       )
     );
+    setPlayerClicks(0);
+    setPlayerMoves(0);
   }, [board]);
 
   const handleShuffleClick = () => {

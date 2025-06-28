@@ -1,7 +1,7 @@
 "use client";
 import Typography from "@mui/material/Typography";
 
-import type { BoardSize, Position } from "@/types";
+import type { BoardSetup, Position } from "@/types";
 
 import "./tile.css";
 
@@ -10,7 +10,7 @@ export interface TileProps {
   label: string;
   currentPosition: Position;
   homePosition: Position;
-  board: BoardSize;
+  board: BoardSetup;
 }
 
 interface PropsWithFunction extends TileProps {
