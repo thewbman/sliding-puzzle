@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 
 import type { BoardSize, Position } from "@/types";
 import { getTileStyle } from "@/lib/board.layout";
+import useScreenSize from "@/hooks/screen-size.hook";
 
 export interface TileProps {
   index: number;
@@ -24,9 +25,11 @@ export default function Tile({
   board,
   onClick,
 }: Readonly<PropsWithFunction>) {
+  const screenSize = useScreenSize();
+
   return (
     <div
-      style={getTileStyle(currentPosition, homePosition, board)}
+      style={getTileStyle(currentPosition, homePosition, board, screenSize)}
       onClick={() => onClick(index)}
     >
       <Typography align="center" variant="h2">

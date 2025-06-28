@@ -11,11 +11,14 @@ import {
 } from "@/lib/board.lib";
 import { getTileHeightPx, getTileWidthPx } from "@/lib/board.layout";
 import { BoardSize } from "@/types";
+import useScreenSize from "@/hooks/screen-size.hook";
 
-export default function Board(board: BoardSize) {
+export default function Board(board: Readonly<BoardSize>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
+
+  const screenSize = useScreenSize();
 
   useEffect(() => {
     setTiles(
@@ -24,7 +27,7 @@ export default function Board(board: BoardSize) {
         // Math.round(Math.random() * TOTAL_POSITIONS)
       )
     );
-  }, [board.rowCount, board.columnCount]);
+  }, [board]);
 
   const handleShuffleClick = () => {
     setTiles(shuffleTiles(tiles, board));
@@ -51,7 +54,7 @@ export default function Board(board: BoardSize) {
       <Button onClick={handleShuffleClick}>Shuffle</Button>
       <div
         style={{
-          width: `${getTileWidthPx(board) * board.columnCount}px`,
+          width: `${getTileWidthPx(board, screenSize) * board.columnCount}px`,
           height: `${getTileHeightPx() * board.rowCount}px`,
           borderColor: "blue",
           borderWidth: 1,
