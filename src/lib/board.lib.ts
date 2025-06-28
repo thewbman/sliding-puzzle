@@ -1,24 +1,24 @@
-import type { Position } from "@/types";
+import type { Position, BoardSize } from "@/types";
 import { TileProps } from "@/components/tile";
 
 export const generateHomeTiles = (
-  rowCount: number,
-  columnCount: number,
+  board: BoardSize,
   indexToRemove?: number
 ): TileProps[] => {
-  const maxTiles = rowCount * columnCount - 1;
+  const maxTiles = board.rowCount * board.columnCount - 1;
 
   let numberLabel = 0;
   const tiles: TileProps[] = [];
 
-  for (let y = 0; y < rowCount; y++) {
-    for (let x = 0; x < columnCount; x++) {
+  for (let y = 0; y < board.rowCount; y++) {
+    for (let x = 0; x < board.columnCount; x++) {
       numberLabel++;
       const tile: TileProps = {
         index: numberLabel - 1,
         label: `${numberLabel}`,
         homePosition: { x, y },
         currentPosition: { x, y },
+        board,
       };
       tiles.push(tile);
     }
@@ -38,8 +38,7 @@ export const generateHomeTiles = (
 
 export const shuffleTiles = (
   input: TileProps[],
-  rowCount: number,
-  columnCount: number
+  board: BoardSize
 ): TileProps[] => {
   const MOVE_ATTEMPTS = 1000; // most will not be valid
   let successfulMoves = 0;
@@ -50,12 +49,7 @@ export const shuffleTiles = (
     const r = Math.floor(Math.random() * tiles.length);
     if (r >= 0 && r < tiles.length) {
       const indexToTry = tiles[r]?.index ?? 0;
-      const newPosition = getNewPositionIfValid(
-        indexToTry,
-        tiles,
-        rowCount,
-        columnCount
-      );
+      const newPosition = getNewPositionIfValid(indexToTry, tiles, board);
       if (newPosition) {
         successfulMoves++;
         tiles = tiles.map((t) =>
@@ -63,8 +57,8 @@ export const shuffleTiles = (
             ? { ...t, currentPosition: { ...newPosition } }
             : t
         );
-      // } else {
-      //   console.warn("unable to move tile", indexToTry);
+        // } else {
+        //   console.warn("unable to move tile", indexToTry);
       }
     } else {
       console.error("expectected array index when shuffling", r);
@@ -79,8 +73,7 @@ export const shuffleTiles = (
 export const getNewPositionIfValid = (
   index: number,
   tiles: TileProps[],
-  rowCount: number,
-  columnCount: number
+  board: BoardSize
 ): Position | null => {
   if (!tiles?.length) {
     return null;
@@ -101,7 +94,12 @@ export const getNewPositionIfValid = (
 
   const movablePosition = adjacentPositions
     .filter((a) => {
-      if (a.x >= columnCount || a.x < 0 || a.y >= rowCount || a.y < 0) {
+      if (
+        a.x >= board.columnCount ||
+        a.x < 0 ||
+        a.y >= board.rowCount ||
+        a.y < 0
+      ) {
         return false;
       }
 

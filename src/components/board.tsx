@@ -9,14 +9,10 @@ import {
   getNewPositionIfValid,
   shuffleTiles,
 } from "@/lib/board.lib";
-import { getTileHeightEm, getTileWidthEm } from "@/lib/board.layout";
+import { getTileHeightPx, getTileWidthPx } from "@/lib/board.layout";
+import { BoardSize } from "@/types";
 
-interface Props {
-  rowCount: number;
-  columnCount: number;
-}
-
-export default function Board({ rowCount, columnCount }: Props) {
+export default function Board(board: BoardSize) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
@@ -24,25 +20,19 @@ export default function Board({ rowCount, columnCount }: Props) {
   useEffect(() => {
     setTiles(
       generateHomeTiles(
-        rowCount,
-        columnCount
+        board
         // Math.round(Math.random() * TOTAL_POSITIONS)
       )
     );
-  }, [rowCount, columnCount]);
+  }, [board.rowCount, board.columnCount]);
 
   const handleShuffleClick = () => {
-    setTiles(shuffleTiles(tiles, rowCount, columnCount));
+    setTiles(shuffleTiles(tiles, board));
   };
 
   const handleTileClick = (index: number) => {
     setPlayerClicks((prev) => prev + 1);
-    const newPosition = getNewPositionIfValid(
-      index,
-      tiles,
-      rowCount,
-      columnCount
-    );
+    const newPosition = getNewPositionIfValid(index, tiles, board);
     if (newPosition) {
       setPlayerMoves((prev) => prev + 1);
       setTiles((ts) =>
@@ -61,8 +51,8 @@ export default function Board({ rowCount, columnCount }: Props) {
       <Button onClick={handleShuffleClick}>Shuffle</Button>
       <div
         style={{
-          width: `${getTileWidthEm() * columnCount}em`,
-          height: `${getTileHeightEm() * rowCount}em`,
+          width: `${getTileWidthPx(board) * board.columnCount}px`,
+          height: `${getTileHeightPx() * board.rowCount}px`,
           borderColor: "blue",
           borderWidth: 1,
           borderStyle: "solid",
@@ -76,6 +66,7 @@ export default function Board({ rowCount, columnCount }: Props) {
             label={t.label}
             homePosition={t.homePosition}
             currentPosition={t.currentPosition}
+            board={board}
             onClick={handleTileClick}
           />
         ))}
