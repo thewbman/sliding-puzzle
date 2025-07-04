@@ -1,7 +1,9 @@
 "use client";
+import Image from "next/image";
 import Typography from "@mui/material/Typography";
 
 import type { BoardSetup, Position } from "@/types";
+import sampleImage from "@/public/pexels-shvetsa-5641889.jpg";
 
 import "./tile.css";
 
@@ -22,23 +24,54 @@ export default function Tile({
   label,
   currentPosition,
   homePosition,
+  board,
   onClick,
 }: Readonly<PropsWithFunction>) {
-
   const isInHomePosition =
     homePosition.x === currentPosition.x && homePosition.y == currentPosition.y;
   const tileClassName = `tile row-${currentPosition.y} column-${
     currentPosition.x
   }${isInHomePosition ? " isInHomePosition" : ""}`;
 
+  const backgroundImageTopPct = -100 * homePosition.y;
+  const backgroundImageLeftPct = -100 * homePosition.x;
+  const backgroundImageTranslate = `translate(${backgroundImageTopPct},${backgroundImageTopPct})`;
+  const backgroundImageWidth = `${100 * board.columnCount}%`;
+  const backgroundImageHeight = `${100 * board.rowCount}%`;
+
   return (
     <div className={tileClassName} onClick={() => onClick(index)}>
-      <Typography align="center" variant="h2">
+      <Typography
+        align="center"
+        variant="h2"
+        style={{ zIndex: 10, position: "relative" }}
+      >
         {label}
       </Typography>
-      <Typography align="center">
+      <Typography align="center" style={{ zIndex: 10, position: "relative" }}>
         Home: {JSON.stringify(homePosition)}
       </Typography>
+      <div className="backgroundImageContainer">
+        <Image
+          className="backgroundImage"
+          alt="tile"
+          src={sampleImage}
+          placeholder="blur"
+          quality={100}
+          width={1000}
+          height={1000}
+          style={{
+            position: "absolute",
+            top: `${backgroundImageTopPct}%`,
+            left: `${backgroundImageLeftPct}%`,
+            transform: backgroundImageTranslate,
+            height: backgroundImageHeight,
+            width: backgroundImageWidth,
+            maxWidth: backgroundImageWidth,
+            zIndex: 1,
+          }}
+        />
+      </div>
     </div>
   );
 }

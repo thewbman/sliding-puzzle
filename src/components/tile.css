@@ -6,9 +6,23 @@
   height: var(--tile-height);
   border: 1px solid rgb(173, 35, 33);
   background-color: #11111170;
+  overflow: hidden;
 
   &.isInHomePosition {
     border: 1px solid #73ad21;
     background-color: #111111a0;
+  }
+
+  .backgroundImageContainer {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .backgroundImage {
+      position: absolute;
+    }
   }
 }

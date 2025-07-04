@@ -7,7 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Board from "@/components/board";
 
 export default function GamePage() {
-  const [rowCount, setRowCount] = useState(3);
+  const [rowCount, setRowCount] = useState(4);
   const [columnCount, setColumnCount] = useState(3);
   const [aspectRatio, setAspectRatio] = useState(0.8);
   const [randomHolePlacement, setRandomHolePlacement] = useState(false);
@@ -21,7 +21,7 @@ export default function GamePage() {
         <TextField
           select
           label="Rows"
-          defaultValue={3}
+          defaultValue={4}
           slotProps={{
             select: {
               native: true,
