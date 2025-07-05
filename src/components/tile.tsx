@@ -53,9 +53,9 @@ export default function Tile({
             className="backgroundImage"
             alt="tile"
             src={board.imageUrl}
+            width={500}
+            height={500}
             quality={100}
-            width={1000}
-            height={1000}
             style={{
               position: "absolute",
               top: `${backgroundImageTopPct}%`,

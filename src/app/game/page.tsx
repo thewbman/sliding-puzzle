@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
+import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import { useImageSize } from "react-image-size";
+// import { useImageSize } from "react-image-size";
 
 import Board from "@/components/board";
 
@@ -13,8 +14,10 @@ export default function GamePage() {
   const LOWER_IMAGE_NUMBER = 1680;
   const UPPER_IMAGE_NUMBER = 2320;
 
+  const fullImageRef = useRef<HTMLImageElement>(null);
   const [rowCount, setRowCount] = useState(DEFAULT_ROWS);
   const [columnCount, setColumnCount] = useState(DEFAULT_COLUMNS);
+  const [aspectRatio, setAspectRatio] = useState(0);
   const [randomHolePlacement, setRandomHolePlacement] = useState(false);
   const [imageNumber, setImageNumber] = useState(
     Math.floor(
@@ -30,12 +33,24 @@ export default function GamePage() {
 
   const imgUrl = `https://freenaturestock.com/wp-content/uploads/freenaturestock-${imageNumber}.jpg`;
 
-  const [dimensions, { loading, error }] = useImageSize(imgUrl);
+  // const [dimensions, { loading, error }] = useImageSize(imgUrl);
 
-  const aspectRatio =
-    dimensions?.height && dimensions?.width
-      ? (columnCount * dimensions.height) / (rowCount * dimensions.width)
-      : 0.1;
+  const handleImageLoaded = useCallback(() => {
+    if (
+      fullImageRef.current?.offsetWidth &&
+      fullImageRef.current?.offsetHeight
+    ) {
+      console.warn(
+        "image offset",
+        fullImageRef.current?.offsetWidth,
+        fullImageRef.current?.offsetHeight
+      );
+      setAspectRatio(
+        (columnCount * fullImageRef.current.offsetHeight) /
+          (rowCount * fullImageRef.current.offsetWidth)
+      );
+    }
+  }, [columnCount, rowCount]);
 
   return (
     <div>
@@ -56,7 +71,10 @@ export default function GamePage() {
             marginTop: "1em",
             marginLeft: "10px",
           }}
-          onChange={(e) => setRowCount(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAspectRatio(0);
+            setRowCount(parseInt(e.target.value));
+          }}
         >
           {nums.map((n) => (
             <option key={n} value={n}>
@@ -79,7 +97,10 @@ export default function GamePage() {
             marginTop: "1em",
             marginLeft: "10px",
           }}
-          onChange={(e) => setColumnCount(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAspectRatio(0);
+            setColumnCount(parseInt(e.target.value));
+          }}
         >
           {nums.map((n) => (
             <option key={n} value={n}>
@@ -95,7 +116,10 @@ export default function GamePage() {
             marginTop: "1em",
             marginLeft: "10px",
           }}
-          onChange={(e) => setRandomHolePlacement(e.target.checked)}
+          onChange={(e) => {
+            setAspectRatio(0);
+            setRandomHolePlacement(e.target.checked);
+          }}
         />
 
         <TextField
@@ -113,7 +137,10 @@ export default function GamePage() {
             marginTop: "1em",
             marginLeft: "10px",
           }}
-          onChange={(e) => setImageNumber(parseInt(e.target.value))}
+          onChange={(e) => {
+            setAspectRatio(0);
+            setImageNumber(parseInt(e.target.value));
+          }}
         >
           {imageNums.map((n) => (
             <option key={n} value={n}>
@@ -129,11 +156,7 @@ export default function GamePage() {
           justifyContent: "center",
         }}
       >
-        {loading ? (
-          "Loading"
-        ) : error ? (
-          `Error loading image - please try another image`
-        ) : (
+        {aspectRatio > 0.1 ? (
           <Board
             rowCount={rowCount}
             columnCount={columnCount}
@@ -141,6 +164,31 @@ export default function GamePage() {
             randomHolePlacement={randomHolePlacement}
             imageUrl={imgUrl}
           />
+        ) : (
+          <div style={{ position: "relative", minWidth: 500 }}>
+            <div
+              style={{
+                backgroundColor: "#000000",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                minHeight: 750,
+              }}
+            >
+              Loading
+            </div>
+            <Image
+              ref={fullImageRef}
+              src={imgUrl}
+              alt={"preload image to get size"}
+              width={500}
+              height={500}
+              quality={100}
+              onLoad={() => handleImageLoaded()}
+              style={{ zIndex: -1, position: "absolute", top: 0, left: 0 }}
+            />
+          </div>
         )}
       </div>
     </div>
