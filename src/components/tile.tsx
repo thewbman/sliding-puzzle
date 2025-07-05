@@ -3,7 +3,6 @@ import Image from "next/image";
 import Typography from "@mui/material/Typography";
 
 import type { BoardSetup, Position } from "@/types";
-import sampleImage from "@/public/pexels-shvetsa-5641889.jpg";
 
 import "./tile.css";
 
@@ -48,30 +47,28 @@ export default function Tile({
       >
         {label}
       </Typography>
-      <Typography align="center" style={{ zIndex: 10, position: "relative" }}>
-        Home: {JSON.stringify(homePosition)}
-      </Typography>
-      <div className="backgroundImageContainer">
-        <Image
-          className="backgroundImage"
-          alt="tile"
-          src={sampleImage}
-          placeholder="blur"
-          quality={100}
-          width={1000}
-          height={1000}
-          style={{
-            position: "absolute",
-            top: `${backgroundImageTopPct}%`,
-            left: `${backgroundImageLeftPct}%`,
-            transform: backgroundImageTranslate,
-            height: backgroundImageHeight,
-            width: backgroundImageWidth,
-            maxWidth: backgroundImageWidth,
-            zIndex: 1,
-          }}
-        />
-      </div>
+      {board.imageUrl ? (
+        <div className="backgroundImageContainer">
+          <Image
+            className="backgroundImage"
+            alt="tile"
+            src={board.imageUrl}
+            quality={100}
+            width={1000}
+            height={1000}
+            style={{
+              position: "absolute",
+              top: `${backgroundImageTopPct}%`,
+              left: `${backgroundImageLeftPct}%`,
+              transform: backgroundImageTranslate,
+              height: backgroundImageHeight,
+              width: backgroundImageWidth,
+              maxWidth: backgroundImageWidth,
+              zIndex: 1,
+            }}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

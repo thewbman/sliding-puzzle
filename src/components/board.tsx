@@ -54,7 +54,7 @@ export default function Board(board: Readonly<BoardSetup>) {
         )
       );
     }
-    // add multi-moves in a straight line
+    // TODO add multi-moves in a straight line
   };
 
   const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;

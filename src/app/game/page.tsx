@@ -3,16 +3,39 @@ import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
+import { useImageSize } from "react-image-size";
 
 import Board from "@/components/board";
 
 export default function GamePage() {
-  const [rowCount, setRowCount] = useState(4);
-  const [columnCount, setColumnCount] = useState(3);
-  const [aspectRatio, setAspectRatio] = useState(0.8);
+  const DEFAULT_ROWS = 4;
+  const DEFAULT_COLUMNS = 3;
+  const LOWER_IMAGE_NUMBER = 1680;
+  const UPPER_IMAGE_NUMBER = 2320;
+
+  const [rowCount, setRowCount] = useState(DEFAULT_ROWS);
+  const [columnCount, setColumnCount] = useState(DEFAULT_COLUMNS);
   const [randomHolePlacement, setRandomHolePlacement] = useState(false);
+  const [imageNumber, setImageNumber] = useState(
+    Math.floor(
+      LOWER_IMAGE_NUMBER +
+        Math.random() * (UPPER_IMAGE_NUMBER - LOWER_IMAGE_NUMBER)
+    )
+  );
 
   const nums = [2, 3, 4, 5, 6];
+  const imageNums = Array.from(
+    Array(UPPER_IMAGE_NUMBER - LOWER_IMAGE_NUMBER).keys()
+  ).map((n) => n + LOWER_IMAGE_NUMBER);
+
+  const imgUrl = `https://freenaturestock.com/wp-content/uploads/freenaturestock-${imageNumber}.jpg`;
+
+  const [dimensions, { loading, error }] = useImageSize(imgUrl);
+
+  const aspectRatio =
+    dimensions?.height && dimensions?.width
+      ? (columnCount * dimensions.height) / (rowCount * dimensions.width)
+      : 0.1;
 
   return (
     <div>
@@ -21,7 +44,7 @@ export default function GamePage() {
         <TextField
           select
           label="Rows"
-          defaultValue={4}
+          defaultValue={DEFAULT_ROWS}
           slotProps={{
             select: {
               native: true,
@@ -44,7 +67,7 @@ export default function GamePage() {
         <TextField
           select
           label="Columns"
-          defaultValue={3}
+          defaultValue={DEFAULT_COLUMNS}
           slotProps={{
             select: {
               native: true,
@@ -64,10 +87,21 @@ export default function GamePage() {
             </option>
           ))}
         </TextField>
+
+        <Checkbox
+          style={{
+            color: "white",
+            backgroundColor: "silver",
+            marginTop: "1em",
+            marginLeft: "10px",
+          }}
+          onChange={(e) => setRandomHolePlacement(e.target.checked)}
+        />
+
         <TextField
           select
-          label="Aspect Ratio"
-          defaultValue={2}
+          label="Image"
+          defaultValue={imageNumber}
           slotProps={{
             select: {
               native: true,
@@ -79,25 +113,14 @@ export default function GamePage() {
             marginTop: "1em",
             marginLeft: "10px",
           }}
-          onChange={(e) =>
-            setAspectRatio(parseFloat(`1.${e.target.value}`) - 0.2)
-          }
+          onChange={(e) => setImageNumber(parseInt(e.target.value))}
         >
-          {nums.map((n) => (
+          {imageNums.map((n) => (
             <option key={n} value={n}>
               {n}
             </option>
           ))}
         </TextField>
-        <Checkbox
-          style={{
-            color: "white",
-            backgroundColor: "silver",
-            marginTop: "1em",
-            marginLeft: "10px",
-          }}
-          onChange={(e) => setRandomHolePlacement(e.target.checked)}
-        ></Checkbox>
       </div>
       <div
         style={{
@@ -106,12 +129,19 @@ export default function GamePage() {
           justifyContent: "center",
         }}
       >
-        <Board
-          rowCount={rowCount}
-          columnCount={columnCount}
-          aspectRatio={aspectRatio}
-          randomHolePlacement={randomHolePlacement}
-        />
+        {loading ? (
+          "Loading"
+        ) : error ? (
+          `Error loading image - please try another image`
+        ) : (
+          <Board
+            rowCount={rowCount}
+            columnCount={columnCount}
+            aspectRatio={aspectRatio}
+            randomHolePlacement={randomHolePlacement}
+            imageUrl={imgUrl}
+          />
+        )}
       </div>
     </div>
   );

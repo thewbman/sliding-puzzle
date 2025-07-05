@@ -8,6 +8,7 @@ export interface BoardSetup {
   columnCount: number;
   aspectRatio: number;
   randomHolePlacement: boolean;
+  imageUrl?: string;
 }
 
 export interface ScreenSize {

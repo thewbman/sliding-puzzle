@@ -42,7 +42,7 @@ export const shuffleTiles = (
   input: TileProps[],
   board: BoardSetup
 ): TileProps[] => {
-  const MOVE_ATTEMPTS = 1000; // most will not be valid
+  const MOVE_ATTEMPTS = 5000; // most will not be valid
   let successfulMoves = 0;
 
   let tiles = [...input];
