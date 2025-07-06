@@ -3,9 +3,6 @@
   color: black;
 
   .board {
-    border-color: blue;
-    border-width: 1;
-    border-style: solid;
     position: relative;
     width: calc(var(--tile-width) * var(--column-count));
     height: calc(var(--tile-height) * var(--row-count));
@@ -14,6 +11,13 @@
       .tile {
         .label {
           display: block;
+          color: red;
+        }
+
+        &.isInHomePosition {
+          .label {
+            color: green;
+          }
         }
       }
     }

@@ -1,23 +1,15 @@
 .tile {
   position: absolute;
-  transition: top 0.10s ease, left 0.10s ease;
+  transition: top 0.1s ease, left 0.1s ease;
   top: calc(var(--row-index) * var(--tile-height));
   left: calc(var(--column-index) * var(--tile-width));
   width: var(--tile-width);
   height: var(--tile-height);
-  /* border: 1px solid rgb(173, 35, 33); */
-  background-color: #11111170;
   overflow: hidden;
-
-  &.isInHomePosition {
-    /* border: 1px solid #73ad21; */
-    background-color: #111111a0;
-  }
 
   .label {
     display: none;
   }
-
 
   .backgroundImageContainer {
     overflow: hidden;
