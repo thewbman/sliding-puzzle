@@ -1,5 +1,6 @@
 .tile {
   position: absolute;
+  transition: top 0.10s ease, left 0.10s ease;
   top: calc(var(--row-index) * var(--tile-height));
   left: calc(var(--column-index) * var(--tile-width));
   width: var(--tile-width);

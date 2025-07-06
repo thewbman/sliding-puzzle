@@ -4,12 +4,11 @@ import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-// import { useImageSize } from "react-image-size";
 
 import Board from "@/components/board";
 
 export default function GamePage() {
-  const DEFAULT_ROWS = 4;
+  const DEFAULT_ROWS = 3;
   const DEFAULT_COLUMNS = 3;
   const LOWER_IMAGE_NUMBER = 1680;
   const UPPER_IMAGE_NUMBER = 2320;
@@ -33,7 +32,6 @@ export default function GamePage() {
 
   const imgUrl = `https://freenaturestock.com/wp-content/uploads/freenaturestock-${imageNumber}.jpg`;
 
-  // const [dimensions, { loading, error }] = useImageSize(imgUrl);
 
   const handleImageLoaded = useCallback(() => {
     if (
