@@ -4,13 +4,23 @@
   left: calc(var(--column-index) * var(--tile-width));
   width: var(--tile-width);
   height: var(--tile-height);
-  border: 1px solid rgb(173, 35, 33);
+  /* border: 1px solid rgb(173, 35, 33); */
   background-color: #11111170;
   overflow: hidden;
 
   &.isInHomePosition {
-    border: 1px solid #73ad21;
+    /* border: 1px solid #73ad21; */
     background-color: #111111a0;
+  }
+
+  .label {
+    display: none;
+  }
+
+  &.showTileLabel {
+    .label {
+      display: block;
+    }
   }
 
   .backgroundImageContainer {

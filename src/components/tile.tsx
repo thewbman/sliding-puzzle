@@ -30,7 +30,7 @@ export default function Tile({
     homePosition.x === currentPosition.x && homePosition.y == currentPosition.y;
   const tileClassName = `tile row-${currentPosition.y} column-${
     currentPosition.x
-  }${isInHomePosition ? " isInHomePosition" : ""}`;
+  }${isInHomePosition ? " isInHomePosition" : " isNotInHomePosition"}`;
 
   const backgroundImageTopPct = -100 * homePosition.y;
   const backgroundImageLeftPct = -100 * homePosition.x;
@@ -41,6 +41,7 @@ export default function Tile({
   return (
     <div className={tileClassName} onClick={() => onClick(index)}>
       <Typography
+        className="label"
         align="center"
         variant="h2"
         style={{ zIndex: 10, position: "relative" }}
