@@ -10,7 +10,7 @@ import {
   getNewPositionIfValid,
   shuffleTiles,
 } from "@/lib/board.lib";
-import { BoardSetup } from "@/types";
+import { BoardSetup, Position } from "@/types";
 
 import "./board.variables.css";
 import "./board.css";
@@ -19,6 +19,8 @@ export default function Board(board: Readonly<BoardSetup>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
+  const [showTileLabel, setShowTileLabel] = useState(false);
+  const [emptyPosition, setEmptyPosition] = useState<Position | null>(null);
   const [solved, setSolved] = useState(false);
 
   useEffect(() => {
@@ -45,7 +47,11 @@ export default function Board(board: Readonly<BoardSetup>) {
 
   const handleTileClick = (index: number) => {
     setPlayerClicks((prev) => prev + 1);
-    const newPosition = getNewPositionIfValid(index, tiles, board);
+    const { newPosition, previousPosition } = getNewPositionIfValid(
+      index,
+      tiles,
+      board
+    );
     if (newPosition) {
       setPlayerMoves((prev) => prev + 1);
       setTiles((ts) =>
@@ -54,10 +60,14 @@ export default function Board(board: Readonly<BoardSetup>) {
         )
       );
     }
+    if (previousPosition) {
+      setEmptyPosition({ ...previousPosition });
+    }
     // TODO add multi-moves in a straight line
   };
 
   const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;
+  const boardClassName = `board${showTileLabel ? " showTileLabel" : ""}`;
 
   return (
     <div
@@ -69,7 +79,7 @@ export default function Board(board: Readonly<BoardSetup>) {
         {solved ? " SOLVED!!!!" : ""}
       </Typography>
       <Button onClick={handleShuffleClick}>Shuffle</Button>
-      <div className="board">
+      <div className={boardClassName}>
         {tiles?.map((t) => (
           <Tile
             key={t.index}

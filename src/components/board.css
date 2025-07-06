@@ -9,5 +9,13 @@
     position: relative;
     width: calc(var(--tile-width) * var(--column-count));
     height: calc(var(--tile-height) * var(--row-count));
+
+    &.showTileLabel {
+      .tile {
+        .label {
+          display: block;
+        }
+      }
+    }
   }
 }

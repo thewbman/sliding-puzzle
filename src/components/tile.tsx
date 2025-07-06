@@ -39,7 +39,13 @@ export default function Tile({
   const backgroundImageHeight = `${100 * board.rowCount}%`;
 
   return (
-    <div className={tileClassName} onClick={() => onClick(index)}>
+    <div
+      className={tileClassName}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(index);
+      }}
+    >
       <Typography
         className="label"
         align="center"

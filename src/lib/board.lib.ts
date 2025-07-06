@@ -1,9 +1,7 @@
 import type { Position, BoardSetup } from "@/types";
 import { TileProps } from "@/components/tile";
 
-export const generateHomeTiles = (
-  board: BoardSetup
-): TileProps[] => {
+export const generateHomeTiles = (board: BoardSetup): TileProps[] => {
   const maxTiles = board.rowCount * board.columnCount - 1;
   const indexToRemove = board.randomHolePlacement
     ? Math.floor(Math.random() * board.columnCount * board.rowCount)
@@ -76,15 +74,15 @@ export const getNewPositionIfValid = (
   index: number,
   tiles: TileProps[],
   board: BoardSetup
-): Position | null => {
+): { newPosition?: Position; previousPosition?: Position } => {
   if (!tiles?.length) {
-    return null;
+    return {};
   }
 
   const currentPosition = tiles.find((t) => t.index === index)?.currentPosition;
 
   if (!currentPosition) {
-    return null;
+    return {};
   }
 
   const adjacentPositions = [
@@ -111,5 +109,5 @@ export const getNewPositionIfValid = (
     })
     ?.find((x) => x);
 
-  return movablePosition ?? null;
+  return { newPosition: movablePosition, previousPosition: currentPosition };
 };

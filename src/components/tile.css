@@ -18,11 +18,6 @@
     display: none;
   }
 
-  &.showTileLabel {
-    .label {
-      display: block;
-    }
-  }
 
   .backgroundImageContainer {
     overflow: hidden;
