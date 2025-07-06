@@ -1,0 +1,10 @@
+.blank-tile {
+  position: absolute;
+  /* transition: top 0.1s ease, left 0.1s ease; */
+  top: calc(var(--row-index) * var(--tile-height));
+  left: calc(var(--column-index) * var(--tile-width));
+  width: var(--tile-width);
+  height: var(--tile-height);
+  background-color: #11111170;
+  overflow: hidden;
+}

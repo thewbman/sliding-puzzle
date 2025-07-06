@@ -1,7 +1,9 @@
 import type { Position, BoardSetup } from "@/types";
 import { TileProps } from "@/components/tile";
 
-export const generateHomeTiles = (board: BoardSetup): TileProps[] => {
+export const generateHomeTiles = (
+  board: BoardSetup
+): { homeTiles: TileProps[]; blankPosition: Position } => {
   const maxTiles = board.rowCount * board.columnCount - 1;
   const indexToRemove = board.randomHolePlacement
     ? Math.floor(Math.random() * board.columnCount * board.rowCount)
@@ -30,26 +32,38 @@ export const generateHomeTiles = (board: BoardSetup): TileProps[] => {
     indexToRemove < 0 ||
     indexToRemove > maxTiles
   ) {
-    return tiles.slice(0, -1);
+    return {
+      blankPosition: tiles[tiles.length - 1].homePosition,
+      homeTiles: tiles.slice(0, -1),
+    };
   }
 
-  return tiles.filter((t) => t.index !== indexToRemove);
+  return {
+    homeTiles: tiles.filter((t) => t.index !== indexToRemove),
+    blankPosition: tiles.find((t) => t.index === indexToRemove)
+      ?.homePosition || { x: 0, y: 0 },
+  };
 };
 
 export const shuffleTiles = (
   input: TileProps[],
   board: BoardSetup
-): TileProps[] => {
+): { updateTiles: TileProps[]; blankPosition: Position } => {
   const MOVE_ATTEMPTS = 5000; // most will not be valid
   let successfulMoves = 0;
 
   let tiles = [...input];
+  const blankPosition = { x: 0, y: 0 };
 
   for (let y = 0; y < MOVE_ATTEMPTS; y++) {
     const r = Math.floor(Math.random() * tiles.length);
     if (r >= 0 && r < tiles.length) {
       const indexToTry = tiles[r]?.index ?? 0;
-      const newPosition = getNewPositionIfValid(indexToTry, tiles, board);
+      const { newPosition, previousPosition } = getNewPositionIfValid(
+        indexToTry,
+        tiles,
+        board
+      );
       if (newPosition) {
         successfulMoves++;
         tiles = tiles.map((t) =>
@@ -57,8 +71,8 @@ export const shuffleTiles = (
             ? { ...t, currentPosition: { ...newPosition } }
             : t
         );
-        // } else {
-        //   console.warn("unable to move tile", indexToTry);
+        blankPosition.x = previousPosition?.x ?? blankPosition.x;
+        blankPosition.y = previousPosition?.y ?? blankPosition.y;
       }
     } else {
       console.error("expectected array index when shuffling", r);
@@ -67,7 +81,7 @@ export const shuffleTiles = (
 
   console.warn("overall shuffle results", successfulMoves, MOVE_ATTEMPTS);
 
-  return tiles;
+  return { updateTiles: tiles, blankPosition };
 };
 
 export const getNewPositionIfValid = (

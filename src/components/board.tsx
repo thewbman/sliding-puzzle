@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 
 import Tile, { TileProps } from "@/components/tile";
+import BlankTile from "@/components/blankTile";
 
 import {
   generateHomeTiles,
@@ -24,7 +25,9 @@ export default function Board(board: Readonly<BoardSetup>) {
   const [solved, setSolved] = useState(false);
 
   useEffect(() => {
-    setTiles(generateHomeTiles(board));
+    const { homeTiles, blankPosition } = generateHomeTiles(board);
+    setTiles(homeTiles);
+    setEmptyPosition(blankPosition);
     setPlayerClicks(0);
     setPlayerMoves(0);
   }, [board]);
@@ -40,7 +43,9 @@ export default function Board(board: Readonly<BoardSetup>) {
   }, [tiles]);
 
   const handleShuffleClick = () => {
-    setTiles(shuffleTiles(tiles, board));
+    const { updateTiles, blankPosition } = shuffleTiles(tiles, board);
+    setTiles(updateTiles);
+    setEmptyPosition(blankPosition);
     setPlayerClicks(0);
     setPlayerMoves(0);
   };
@@ -59,11 +64,15 @@ export default function Board(board: Readonly<BoardSetup>) {
           t.index === index ? { ...t, currentPosition: { ...newPosition } } : t
         )
       );
-    }
-    if (previousPosition) {
-      setEmptyPosition({ ...previousPosition });
+      if (previousPosition) {
+        setEmptyPosition({ ...previousPosition });
+      }
     }
     // TODO add multi-moves in a straight line
+  };
+
+  const handleBlankTileClick = () => {
+    setShowTileLabel((prev) => !prev);
   };
 
   const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;
@@ -91,6 +100,9 @@ export default function Board(board: Readonly<BoardSetup>) {
             onClick={handleTileClick}
           />
         ))}
+        {emptyPosition ? (
+          <BlankTile position={emptyPosition} onClick={handleBlankTileClick} />
+        ) : null}
       </div>
     </div>
   );
