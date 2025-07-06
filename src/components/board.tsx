@@ -22,18 +22,22 @@ export default function Board(board: Readonly<BoardSetup>) {
   const [tiles, setTiles] = useState<TileProps[]>([]);
   const [showTileLabel, setShowTileLabel] = useState(false);
   const [emptyPosition, setEmptyPosition] = useState<Position | null>(null);
-  const [solved, setSolved] = useState(false);
+  const [isSolved, setIsSolved] = useState(false);
 
   useEffect(() => {
-    const { homeTiles, blankPosition } = generateHomeTiles(board);
-    setTiles(homeTiles);
-    setEmptyPosition(blankPosition);
+    const { homeTiles } = generateHomeTiles(board);
+    const { updatedTiles, updateBlankPosition } = shuffleTiles(
+      homeTiles,
+      board
+    );
+    setTiles(updatedTiles);
+    setEmptyPosition(updateBlankPosition);
     setPlayerClicks(0);
     setPlayerMoves(0);
   }, [board]);
 
   useEffect(() => {
-    setSolved(
+    setIsSolved(
       tiles.every(
         (t) =>
           t.currentPosition.x === t.homePosition.x &&
@@ -43,9 +47,9 @@ export default function Board(board: Readonly<BoardSetup>) {
   }, [tiles]);
 
   const handleShuffleClick = () => {
-    const { updateTiles, blankPosition } = shuffleTiles(tiles, board);
-    setTiles(updateTiles);
-    setEmptyPosition(blankPosition);
+    const { updatedTiles, updateBlankPosition } = shuffleTiles(tiles, board);
+    setTiles(updatedTiles);
+    setEmptyPosition(updateBlankPosition);
     setPlayerClicks(0);
     setPlayerMoves(0);
   };
@@ -76,7 +80,9 @@ export default function Board(board: Readonly<BoardSetup>) {
   };
 
   const wrapperClassName = `board-container total-rows-${board.rowCount} total-columns-${board.columnCount}`;
-  const boardClassName = `board${showTileLabel ? " showTileLabel" : ""}`;
+  const boardClassName = `board${showTileLabel ? " showTileLabel" : ""}${
+    isSolved ? " isSolved" : ""
+  }`;
 
   return (
     <div
@@ -85,7 +91,7 @@ export default function Board(board: Readonly<BoardSetup>) {
     >
       <Typography>
         Board ({playerMoves} moves, {playerClicks} clicks)
-        {solved ? " SOLVED!!!!" : ""}
+        {isSolved ? " SOLVED!!!!" : ""}
       </Typography>
       <Button onClick={handleShuffleClick}>Shuffle</Button>
       <div className={boardClassName}>

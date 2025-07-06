@@ -48,12 +48,12 @@ export const generateHomeTiles = (
 export const shuffleTiles = (
   input: TileProps[],
   board: BoardSetup
-): { updateTiles: TileProps[]; blankPosition: Position } => {
+): { updatedTiles: TileProps[]; updateBlankPosition: Position } => {
   const MOVE_ATTEMPTS = 5000; // most will not be valid
   let successfulMoves = 0;
 
   let tiles = [...input];
-  const blankPosition = { x: 0, y: 0 };
+  const updateBlankPosition = { x: 0, y: 0 };
 
   for (let y = 0; y < MOVE_ATTEMPTS; y++) {
     const r = Math.floor(Math.random() * tiles.length);
@@ -71,8 +71,8 @@ export const shuffleTiles = (
             ? { ...t, currentPosition: { ...newPosition } }
             : t
         );
-        blankPosition.x = previousPosition?.x ?? blankPosition.x;
-        blankPosition.y = previousPosition?.y ?? blankPosition.y;
+        updateBlankPosition.x = previousPosition?.x ?? updateBlankPosition.x;
+        updateBlankPosition.y = previousPosition?.y ?? updateBlankPosition.y;
       }
     } else {
       console.error("expectected array index when shuffling", r);
@@ -81,7 +81,7 @@ export const shuffleTiles = (
 
   console.warn("overall shuffle results", successfulMoves, MOVE_ATTEMPTS);
 
-  return { updateTiles: tiles, blankPosition };
+  return { updatedTiles: tiles, updateBlankPosition };
 };
 
 export const getNewPositionIfValid = (
