@@ -1,5 +1,7 @@
 "use client";
-import Typography from "@mui/material/Typography";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 import type { Position } from "@/types";
 
@@ -27,14 +29,11 @@ export default function BlankTile({
         onClick();
       }}
     >
-      <Typography
-        className="label"
-        align="center"
-        variant="h2"
-        style={{ zIndex: 10, position: "relative" }}
-      >
-        X
-      </Typography>
+      <div className="icon-wrapper">
+        <VisibilityIcon className="visibility-icon" />
+        <VisibilityOffIcon className="visibility-off-icon" />
+        <ThumbUpIcon className="thumb-up-icon" />
+      </div>
     </div>
   );
 }

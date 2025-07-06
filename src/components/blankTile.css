@@ -1,10 +1,59 @@
 .blank-tile {
   position: absolute;
-  /* transition: top 0.1s ease, left 0.1s ease; */
   top: calc(var(--row-index) * var(--tile-height));
   left: calc(var(--column-index) * var(--tile-width));
   width: var(--tile-width);
   height: var(--tile-height);
   background-color: #11111170;
   overflow: hidden;
+
+  .icon-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .visibility-icon {
+      display: block;
+    }
+    .visibility-off-icon {
+      display: none;
+    }
+    .thumb-up-icon {
+      display: none;
+    }
+  }
+}
+
+.board.showTileLabel {
+  .blank-tile {
+    .icon-wrapper {
+      .visibility-icon {
+        display: none;
+      }
+      .visibility-off-icon {
+        display: block;
+      }
+      .thumb-up-icon {
+        display: none;
+      }
+    }
+  }
+}
+
+.board.isSolved {
+  .blank-tile {
+    .icon-wrapper {
+      .visibility-icon {
+        display: none;
+      }
+      .visibility-off-icon {
+        display: none;
+      }
+      .thumb-up-icon {
+        display: block;
+      }
+    }
+  }
 }

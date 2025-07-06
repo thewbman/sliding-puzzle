@@ -19,10 +19,18 @@ import "./board.css";
 export default function Board(board: Readonly<BoardSetup>) {
   const [playerClicks, setPlayerClicks] = useState(0);
   const [playerMoves, setPlayerMoves] = useState(0);
+  const [playerHints, setPlayerHints] = useState(0);
   const [tiles, setTiles] = useState<TileProps[]>([]);
   const [showTileLabel, setShowTileLabel] = useState(false);
   const [emptyPosition, setEmptyPosition] = useState<Position | null>(null);
   const [isSolved, setIsSolved] = useState(false);
+
+  const resetPlayerCounts = () => {
+    setPlayerClicks(0);
+    setPlayerMoves(0);
+    setPlayerHints(0);
+    setShowTileLabel(false);
+  };
 
   useEffect(() => {
     const { homeTiles } = generateHomeTiles(board);
@@ -32,8 +40,7 @@ export default function Board(board: Readonly<BoardSetup>) {
     );
     setTiles(updatedTiles);
     setEmptyPosition(updateBlankPosition);
-    setPlayerClicks(0);
-    setPlayerMoves(0);
+    resetPlayerCounts();
   }, [board]);
 
   useEffect(() => {
@@ -50,8 +57,7 @@ export default function Board(board: Readonly<BoardSetup>) {
     const { updatedTiles, updateBlankPosition } = shuffleTiles(tiles, board);
     setTiles(updatedTiles);
     setEmptyPosition(updateBlankPosition);
-    setPlayerClicks(0);
-    setPlayerMoves(0);
+    resetPlayerCounts();
   };
 
   const handleTileClick = (index: number) => {
@@ -76,6 +82,9 @@ export default function Board(board: Readonly<BoardSetup>) {
   };
 
   const handleBlankTileClick = () => {
+    if (!showTileLabel) {
+      setPlayerHints((h) => h + 1);
+    }
     setShowTileLabel((prev) => !prev);
   };
 
@@ -90,7 +99,7 @@ export default function Board(board: Readonly<BoardSetup>) {
       style={{ "--tile-aspect-ratio": board.aspectRatio }}
     >
       <Typography>
-        Board ({playerMoves} moves, {playerClicks} clicks)
+        Board ({playerMoves} moves, {playerClicks} clicks, {playerHints} hints)
         {isSolved ? " SOLVED!!!!" : ""}
       </Typography>
       <Button onClick={handleShuffleClick}>Shuffle</Button>
